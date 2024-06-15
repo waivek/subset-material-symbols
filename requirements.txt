@@ -1,2 +1,9 @@
 waivek
 wheel
+requests
+argparse
+argcomplete
+
+# so that we can do `subset_gf_icons` in the CLI
+-e git+https://github.com/rsheeter/subset-gf-icons#egg=subset-gf-icons
+
