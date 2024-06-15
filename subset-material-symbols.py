@@ -12,6 +12,7 @@ import argparse
 import argcomplete
 import subprocess
 import textwrap
+import base64
 Code; ic; ib; rel2abs
 
 def get_ttf_paths() -> list[str]:
@@ -89,21 +90,25 @@ def get_afl_file_contents():
     return afl_file_contents
 
 def get_inline_stylesheet_string(style, icons, woff_path):
-    import base64
     with open(woff_path, "rb") as f:
         woff_bytes = f.read()
     woff_base64 = base64.b64encode(woff_bytes).decode("utf-8")
+    filesize = os.path.getsize(woff_path)
+    icons_comma_sep = ",".join(icons)
+    filesize_kb = filesize / 1024
 
-    template = """
+
+    template = f"""
         @font-face {{
-            font-family: 'Material Symbols {0} Subset[{1}]';
+            font-family: 'Material Symbols {style.capitalize()} [{icons_comma_sep}]';
             font-style: normal;
             font-weight: 100 700;
-            src: url(data:font/woff2;charset=utf-8;base64,{2}) format('woff2');
+            /* size: {filesize_kb:.2f}KB */
+            src: url(data:font/woff2;charset=utf-8;base64,{woff_base64}) format('woff2');
         }}
 
-        .material-symbols-{3} {{
-            font-family: 'Material Symbols {0} Subset[{1}]';
+        .material-symbols-{style.lower()} {{
+            font-family: 'Material Symbols {style.capitalize()} [{icons_comma_sep}]';
             font-weight: normal;
             font-style: normal;
             font-size: 24px;
@@ -119,7 +124,7 @@ def get_inline_stylesheet_string(style, icons, woff_path):
         }} 
     """
     
-    string = template.format(style.capitalize(), ",".join(icons), woff_base64, style.lower())
+    string = template
     string = textwrap.dedent(string).strip()
     return string
 
@@ -151,7 +156,7 @@ def main():
     # /home/vivek/subset-material-symbols/data/MaterialSymbolsRounded[FILL,GRAD,opsz,wght]-s
     print()
     css_string = get_inline_stylesheet_string(style, icons, path)
-    output_filename = "material-symbols-{style}-subset[{icons}].css".format(style=style.lower(), icons=",".join(icons))
+    output_filename = "material-symbols-{style}[{icons}].css".format(style=style.lower(), icons=",".join(icons))
     output_path = rel2abs("data/" + output_filename)
 
     with open(output_path, "w") as f:

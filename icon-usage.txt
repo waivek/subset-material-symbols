@@ -1,0 +1,9 @@
+home
+favorite
+star
+send
+drafts
+mail
+delete
+library_books
+update
