@@ -142,6 +142,7 @@ def main():
     # subprocess
     #  subset_gf_icons MaterialSymbolsOutlined\[FILL\,GRAD\,opsz\,wght\].ttf menu alarm_on
     command = ["subset_gf_icons", "--flavor", "woff2", ttf_path] + icons
+    print(" ".join(command))
     result = subprocess.run(command, capture_output=True)
     exit_code = result.returncode
     stdout = result.stdout.decode("utf-8")
