@@ -1,4 +1,16 @@
+# also see: https://github.com/github/gitignore/blob/main/Python.gitignore
+# also see: https://github.com/github/gitignore/blob/main/Node.gitignore
+
+# Folders
+node_modules/
+__pycache__/
 .direnv/
-.envrc
 data/
-*.afl
+
+# Files to ignore
+*.env
+
+# Files to keep
+# we use .gitkeep to keep empty folders
+!.gitkeep 
+
