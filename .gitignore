@@ -14,3 +14,4 @@ data/
 # we use .gitkeep to keep empty folders
 !.gitkeep 
 
+*.afl
